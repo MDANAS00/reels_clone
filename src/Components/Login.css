@@ -1,0 +1,17 @@
+.LoginWrapper{
+    display: flex;
+    justify-content: center;
+}
+
+.LoginCard{
+    width: 27vw;
+    margin-top: 5%;
+}
+
+.insta-logo{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+}
