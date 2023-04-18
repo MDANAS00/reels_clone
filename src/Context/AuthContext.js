@@ -15,7 +15,8 @@ export function AuthProvider({children}){
     }
 
     function logout(){
-        return auth.signOut()
+        console.log("signed out");
+        return auth.signOut();
     }
 
     useEffect(()=>{

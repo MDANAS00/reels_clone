@@ -11,9 +11,11 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route element={<PrivateRoute/>}>
+            <Route path='/' element={<Feed/>}/>
+          </Route>
           <Route path='/login' element={<Login/>}/>
           <Route path='/signup' element={<Signup/>}/>
-          <Route path='/' element={<Feed/>}/>
         </Routes>
      </AuthProvider>
     </BrowserRouter>
