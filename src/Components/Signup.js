@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {Link,useNavigate} from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
+import { database, storage } from '../firebase';
 
 
 export default function Signup() {
@@ -32,7 +33,7 @@ export default function Signup() {
     const [name,setName] = useState('');
     const [file,setFile] = useState(null);
     const [error,setError] = useState('');
-    const [loading,setLoading] = useState('');
+    const [loading,setLoading] = useState(false);
     const history = useNavigate();
     const {signup} = useContext(AuthContext);
 
@@ -45,12 +46,40 @@ export default function Signup() {
             return;
         }
         try{
+            setError('')
+            setLoading(true)
             let userObj = await signup(email,password)
             let uid = userObj.user.uid
-            console.log(uid);
+            const uploadTask = storage.ref(`/users/${uid}/ProfileImage`).put(file);
+            uploadTask.on('state_changed',fn1,fn2,fn3);
+            function fn1(snapshot){
+                let progress = (snapshot.bytesTransferred / snapshot.totalBytes)*100;
+                console.log(`Upload is ${progress} done.`)
+            }
+            function fn2(error){
+                setError(error);
+                setTimeout(()=>{
+                    setError('')
+                },2000);
+                setLoading(false)
+                return;
+            }
+            function fn3(){
+                uploadTask.snapshot.ref.getDownloadURL().then((url)=>{
+                    console.log(url);
+                    database.users.doc(uid).set({
+                        email:email,
+                        userId:uid,
+                        fullname:name,
+                        profileUrl:url,
+                        createdAt:database.getTimeStamp()
+                    })
+                })
+                setLoading(false);
+                history('/');
+            }
         }catch(error){
             setError(error);
-            console.log('HELLO');
             setTimeout(()=>{
                 setError('')
             },2000)
@@ -78,7 +107,7 @@ export default function Signup() {
                     </Button>
                 </CardContent>
             <CardActions>
-                <Button color="primary" fullWidth={true} variant='contained' disable={loading} onClick={handleClick}>
+                <Button color="primary" fullWidth={true} variant='contained' disabled={loading} onClick={handleClick}>
                 Sign up
                 </Button>
             </CardActions>
@@ -100,3 +129,4 @@ export default function Signup() {
     </div>
   );
 }
+

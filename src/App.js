@@ -4,6 +4,7 @@ import Login from './Components/Login';
 import { BrowserRouter,Route,Routes } from 'react-router-dom';
 import { AuthProvider } from './Context/AuthContext';
 import Feed from './Components/Feed';
+import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
   return (
