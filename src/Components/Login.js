@@ -60,6 +60,7 @@ export default function Login() {
                 setError('')
             },2000);
             setLoading(false);
+            history('/signup');
         }
     }
 
