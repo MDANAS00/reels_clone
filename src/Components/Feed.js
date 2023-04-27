@@ -18,7 +18,7 @@ function Feed() {
 
   return (
     <div style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
-      <Navbar/>
+      <Navbar userData={userData}/>
       <UploadFile user={userData}/>
       <Posts userData={userData}/>
     </div>
